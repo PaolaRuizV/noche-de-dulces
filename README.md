@@ -1,4 +1,4 @@
-# 🎃 ¿Noche ideal para pedir dulces?
+# ¿Noche ideal para pedir dulces?
 
 App web de Halloween que consulta el clima de una ciudad y decide si conviene salir a pedir dulces (18:00–22:00 hora local).
 
