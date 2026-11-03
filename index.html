@@ -1,0 +1,265 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>¿Noche ideal para pedir dulces?</title>
+<link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🎃</text></svg>">
+<link href="https://fonts.googleapis.com/css2?family=Creepster&family=Spectral:wght@400;600&display=swap" rel="stylesheet">
+<style>
+:root{--ink:#140a22;--bruise:#2b1245;--pumpkin:#ff7a1a;--candle:#ffd36b;--fog:#d4cbe6;--ok:#9be564;--bad:#ff5d73;--c:var(--candle)}
+*{box-sizing:border-box}
+html,body{margin:0}
+body{min-height:100vh;background:radial-gradient(ellipse at 50% 0%,var(--bruise),var(--ink) 65%);color:var(--fog);font:18px/1.6 Spectral,Georgia,serif;overflow-x:hidden;transition:background .6s}
+body.ok{--c:var(--ok)}body.meh{--c:var(--candle)}body.scared{--c:var(--bad);background:radial-gradient(ellipse at 50% 0%,#3a1030,#0d0618 65%)}
+#fx{position:fixed;inset:0;width:100%;height:100%;pointer-events:none;z-index:0}
+main{position:relative;z-index:1;display:flex;flex-direction:column;align-items:center;padding:2rem 1rem 3rem}
+h1{font:clamp(2.4rem,8vw,4.6rem)/1 Creepster,Impact,fantasy;color:var(--pumpkin);margin:.2rem 0 .4rem;text-align:center;text-shadow:0 0 24px #ff7a1a88;letter-spacing:.03em}
+.sub{max-width:34rem;text-align:center;margin:0 0 1.6rem}
+form{display:flex;flex-wrap:wrap;gap:.6rem;width:100%;max-width:34rem}
+label{display:flex;flex-direction:column;gap:.25rem;flex:1 1 9rem;font-size:.85rem}
+select{width:100%;min-width:0;padding:.8rem 1rem;border-radius:999px;border:2px solid #5b3a85;background:#1d0f33;color:#fff;font:inherit}
+select:focus-visible,button:focus-visible,.chip:focus-visible{outline:3px solid var(--candle);outline-offset:2px}
+button{flex:1 1 100%;padding:.8rem 1.4rem;border:0;border-radius:999px;background:var(--pumpkin);color:#2a0f00;font:inherit;font-weight:600;cursor:pointer}
+button:disabled{opacity:.6;cursor:wait}
+#lantern{width:min(260px,64vw);margin:1.4rem 0 .4rem;filter:drop-shadow(0 0 28px #ff7a1a99);animation:fl 2.4s infinite}
+#lantern .face{fill:var(--candle);transition:fill .4s}
+.scared #lantern .face{fill:#ffe9e9}.meh #lantern .face{fill:#ffc069}
+.ok #lantern{animation:bob 2.2s ease-in-out infinite}
+.scared #lantern{animation:shake .5s infinite}
+@keyframes fl{0%,100%{filter:drop-shadow(0 0 28px #ff7a1a99)}50%{filter:drop-shadow(0 0 42px #ff7a1add)}}
+@keyframes bob{50%{transform:translateY(-10px) rotate(-2deg)}}
+@keyframes shake{25%{transform:translateX(-3px) rotate(-1deg)}75%{transform:translateX(3px) rotate(1deg)}}
+#result{width:100%;max-width:34rem;text-align:center}
+.ring{width:170px;aspect-ratio:1;padding:10px;border-radius:50%;margin:.4rem auto;background:conic-gradient(var(--c) calc(var(--s,0)*1%),#2a1646 0);box-shadow:0 0 30px color-mix(in srgb,var(--c) 40%,transparent)}
+.ring .in{width:100%;height:100%;border-radius:50%;background:var(--ink);display:grid;place-items:center}
+.score{font:3rem/1 Creepster,Impact,fantasy;color:var(--c)}
+.score small{font-size:1.2rem;opacity:.7}
+.verdict{font-size:1.4rem;font-weight:600;color:#fff;margin:.4rem 0 .2rem}
+.where{font-size:.9rem;opacity:.8}
+.stats{display:grid;grid-template-columns:repeat(4,1fr);gap:.5rem;margin:1.2rem 0}
+.stats div{background:#1d0f33;border:1px solid #4a2c70;border-radius:.7rem;padding:.6rem .2rem}
+.stats b{display:block;color:var(--candle);font-size:1.2rem}
+.stats span{font-size:.8rem}
+.card{background:#1d0f33cc;border:1px solid #4a2c70;border-radius:1rem;padding:1rem 1.1rem;margin:.9rem 0;text-align:left;backdrop-filter:blur(4px)}
+.card h2{font:1.5rem/1.1 Creepster,Impact,fantasy;color:var(--pumpkin);margin:0 0 .6rem;letter-spacing:.03em}
+.note{margin:.6rem 0 0;font-size:.95rem}
+.bars{display:flex;gap:.5rem;height:130px}
+.bar{flex:1;display:flex;flex-direction:column;align-items:center;justify-content:flex-end;font-size:.8rem;min-width:0}
+.bar em{font-style:normal;height:1.4rem;font-size:1.1rem}
+.bar i{display:block;width:100%;min-height:6px;border-radius:.5rem .5rem .2rem .2rem;background:linear-gradient(#7a4bb8,#4a2c70);transform-origin:bottom;animation:grow .8s both}
+.bar.best i{background:linear-gradient(var(--candle),var(--pumpkin));box-shadow:0 0 16px #ff7a1a99}
+.bar.best span{color:var(--candle);font-weight:600}
+@keyframes grow{from{transform:scaleY(0)}}
+.cos{display:flex;gap:.9rem;align-items:center}
+.cos .e{font-size:3rem;line-height:1}
+.cos b{color:#fff;display:block}
+.kit{display:flex;flex-wrap:wrap;gap:.5rem}
+.chip{flex:none;padding:.45rem .9rem;border-radius:999px;border:2px solid #5b3a85;background:#1d0f33;color:var(--fog);font-size:.95rem;font-weight:400;cursor:pointer}
+.chip[aria-pressed=true]{background:var(--ok);border-color:var(--ok);color:#12310a;font-weight:600}
+ul{text-align:left;margin:1rem auto;max-width:28rem;padding-left:1.2rem}
+.ghost{flex:none;background:transparent;border:2px solid var(--candle);color:var(--candle);margin-top:.4rem}
+.err{color:var(--bad);min-height:1.6em;text-align:center}
+footer{position:relative;z-index:1;margin:1rem 0 2.5rem;font-size:.8rem;opacity:.7;text-align:center}
+footer a{color:var(--candle)}
+@media(prefers-reduced-motion:reduce){#lantern,.bar i{animation:none}}
+[hidden]{display:none!important}
+</style>
+</head>
+<body>
+<canvas id="fx" aria-hidden="true"></canvas>
+<main>
+<h1>¿Noche de dulces?</h1>
+<p class="sub">Elige departamento, provincia y distrito del Perú. La calabaza lee el clima de esta noche (18:00 a 22:00) y te dice si salir, a qué hora y con qué disfraz.</p>
+<form id="f">
+  <label>Departamento<select id="dep"><option>Cargando…</option></select></label>
+  <label>Provincia<select id="prov"></select></label>
+  <label>Distrito<select id="dist"></select></label>
+  <button id="go">Consultar el clima</button>
+</form>
+
+<svg id="lantern" viewBox="0 0 200 180" role="img" aria-label="Calabaza de Halloween">
+  <rect x="94" y="8" width="12" height="28" rx="4" fill="#3d7a2a"/>
+  <ellipse cx="100" cy="105" rx="92" ry="68" fill="#ff7a1a"/>
+  <ellipse cx="62" cy="105" rx="38" ry="66" fill="#e5640a" opacity=".55"/>
+  <ellipse cx="138" cy="105" rx="38" ry="66" fill="#e5640a" opacity=".55"/>
+  <g class="face" id="face"></g>
+</svg>
+
+<section id="result" aria-live="polite" hidden>
+  <div class="ring" id="ring"><div class="in"><div class="score"><span id="score">0</span><small>/100</small></div></div></div>
+  <div class="verdict" id="verdict"></div>
+  <div class="where" id="where"></div>
+  <div class="stats" id="stats"></div>
+  <div class="card"><h2>Mejor hora para salir</h2><div class="bars" id="bars"></div><p class="note" id="besttxt"></p></div>
+  <div class="card"><h2>Disfraz recomendado</h2><div class="cos" id="cos"></div></div>
+  <div class="card"><h2>Kit del cazador de dulces</h2><div class="kit" id="kit"></div><p class="note" id="kitmsg">Marca lo que ya tienes listo.</p></div>
+  <ul id="tips"></ul>
+  <button id="share" type="button" class="ghost">Compartir veredicto</button>
+</section>
+<p id="msg" class="err" role="alert"></p>
+</main>
+
+<footer>Datos: <a href="https://open-meteo.com">Open-Meteo</a> (Information as a Service) · Alojado en <a href="https://vercel.com">Vercel</a> (PaaS)</footer>
+
+<script>
+const faces = {
+  happy:'<polygon points="60,70 82,70 71,48"/><polygon points="118,70 140,70 129,48"/><path d="M52 108 Q100 170 148 108 L136 112 L124 126 L112 114 L100 130 L88 114 L76 126 L64 112 Z"/>',
+  meh:'<polygon points="60,70 82,70 71,48"/><polygon points="118,70 140,70 129,48"/><rect x="62" y="116" width="76" height="12" rx="3"/>',
+  scared:'<ellipse cx="72" cy="66" rx="13" ry="17"/><ellipse cx="128" cy="66" rx="13" ry="17"/><ellipse cx="100" cy="128" rx="20" ry="24"/>'
+};
+const $ = id => document.getElementById(id);
+const reduce = matchMedia('(prefers-reduced-motion:reduce)').matches;
+$('face').innerHTML = faces.happy;
+
+/* ---------- Efectos de ambiente según el clima ---------- */
+const cv = $('fx'), cx = cv.getContext('2d');
+let W, H, P = [], fx = 'float', flash = 0, last = '';
+const rnd = Math.random;
+function size(){ W = cv.width = innerWidth; H = cv.height = innerHeight; }
+addEventListener('resize', size); size();
+function spawn(init){
+  if (fx === 'rain') return { x: rnd()*W, y: init ? rnd()*H : -20, v: 9 + rnd()*7, l: 10 + rnd()*14 };
+  if (fx === 'fog')  return { x: rnd()*W, y: H*.4 + rnd()*H*.6, r: 90 + rnd()*120, v: .15 + rnd()*.3 };
+  return { x: rnd()*W, y: init ? rnd()*H : H + 30, v: .3 + rnd()*.6, s: 16 + rnd()*20, ph: rnd()*6.28, e: ['👻','🦇','🍬','🕸'][Math.floor(rnd()*4)] };
+}
+function setFx(m){ fx = m; P = Array.from({ length: m === 'rain' ? 130 : m === 'fog' ? 9 : 20 }, () => spawn(true)); }
+function tick(t){
+  cx.clearRect(0, 0, W, H);
+  for (const p of P){
+    if (fx === 'rain'){
+      cx.strokeStyle = 'rgba(170,190,255,.45)'; cx.beginPath(); cx.moveTo(p.x, p.y); cx.lineTo(p.x - 2, p.y + p.l); cx.stroke();
+      p.y += p.v; p.x -= .6; if (p.y > H) Object.assign(p, spawn(false));
+    } else if (fx === 'fog'){
+      const g = cx.createRadialGradient(p.x, p.y, 0, p.x, p.y, p.r);
+      g.addColorStop(0, 'rgba(212,203,230,.13)'); g.addColorStop(1, 'rgba(212,203,230,0)');
+      cx.fillStyle = g; cx.fillRect(p.x - p.r, p.y - p.r, p.r*2, p.r*2);
+      p.x += p.v; if (p.x - p.r > W) p.x = -p.r;
+    } else {
+      cx.globalAlpha = .55; cx.font = p.s + 'px serif'; cx.fillText(p.e, p.x + Math.sin(t/900 + p.ph)*18, p.y); cx.globalAlpha = 1;
+      p.y -= p.v; if (p.y < -30) Object.assign(p, spawn(false));
+    }
+  }
+  if (document.body.classList.contains('scared') && !flash && rnd() < .004) flash = .5;
+  if (flash > 0){ cx.fillStyle = 'rgba(255,255,255,' + flash + ')'; cx.fillRect(0, 0, W, H); flash = Math.max(0, flash - .04); }
+  if (!reduce) requestAnimationFrame(tick);
+}
+setFx('float'); reduce ? tick(0) : requestAnimationFrame(tick);
+
+/* ---------- Selectores ---------- */
+let DEPS = [];
+const opts = (arr, f) => arr.map(f).join('');
+function fillProv(){
+  const d = DEPS.find(x => x.name === $('dep').value);
+  $('prov').innerHTML = opts(d.provinces, p => `<option>${p.name}</option>`);
+  fillDist();
+}
+function fillDist(){
+  const d = DEPS.find(x => x.name === $('dep').value);
+  const p = d.provinces.find(x => x.name === $('prov').value);
+  $('dist').innerHTML = opts(p.districts, x => `<option value="${x.id}">${x.name}</option>`);
+}
+function restore(){
+  let id = ''; try { id = localStorage.getItem('noche:last') || ''; } catch (e) {}
+  const [d, p, i] = id.split('-').map(Number), dep = DEPS[d];
+  if (!dep || !dep.provinces[p] || !dep.provinces[p].districts[i]) return false;
+  $('dep').value = dep.name; fillProv();
+  $('prov').value = dep.provinces[p].name; fillDist();
+  $('dist').value = id; return true;
+}
+fetch('/api/noche').then(r => r.json()).then(({departments}) => {
+  DEPS = departments;
+  $('dep').innerHTML = opts(DEPS, d => `<option>${d.name}</option>`);
+  $('dep').value = 'Lima'; fillProv();
+  $('dep').addEventListener('change', fillProv);
+  $('prov').addEventListener('change', fillDist);
+  if (restore()) $('f').requestSubmit();
+}).catch(() => { $('msg').textContent = 'No se pudo cargar la lista de lugares. Recarga la página.'; });
+
+$('f').addEventListener('submit', async e => {
+  e.preventDefault();
+  const city = $('dist').value; if (!city) return;
+  $('go').disabled = true; $('msg').textContent = 'Consultando a los espíritus del clima…';
+  try {
+    const r = await fetch('/api/noche?place=' + encodeURIComponent(city));
+    const d = await r.json();
+    if (!r.ok) throw new Error(d.error);
+    try { localStorage.setItem('noche:last', city); } catch (e) {}
+    render(d); $('msg').textContent = '';
+  } catch (err) {
+    $('result').hidden = true;
+    $('msg').textContent = err.message || 'Algo salió mal. Intenta de nuevo.';
+  }
+  $('go').disabled = false;
+});
+
+/* ---------- Lógica nueva: mejor hora, disfraz, kit ---------- */
+function hourScore(h){
+  let s = 100 - h.p*.5 - (h.wet ? 15 : 0);
+  const w = h.w || 0; s -= w > 25 ? 20 : w > 15 ? 8 : 0;
+  s -= h.t < 8 ? 25 : h.t < 12 ? 12 : h.t > 30 ? 10 : 0;
+  return Math.max(5, Math.round(s));
+}
+function costume(s){
+  if (s.mm > .5 || s.rain >= 60) return ['👻','Fantasma impermeable','Una sábana de plástico transparente: da miedo y no te mojas.'];
+  if (s.temp < 12) return ['🧟','Momia abrigada','Vendas sobre un buzo grueso: tibia y aterradora.'];
+  if (s.wind > 15) return ['💀','Esqueleto ajustado','Nada de capas largas: un traje pegado no sale volando.'];
+  if (s.temp > 28) return ['🎃','Calabaza ligera','Tela fresca y máscara de cartón: terror sin sudor.'];
+  return ['🧛','Vampiro clásico','Capa larga y colmillos: el clima te deja lucirte.'];
+}
+function kit(s){
+  const k = [['🍬','Bolsa grande'],['🔦','Linterna']];
+  if (s.mm > .5 || s.rain >= 50) k.push(['☂️','Paraguas']);
+  if (s.temp < 12) k.push(['🧥','Abrigo extra']);
+  if (s.wind > 15) k.push(['🧢','Ligas para el sombrero']);
+  if (s.temp > 28) k.push(['💧','Botella de agua']);
+  return k;
+}
+function countUp(n){
+  const el = $('score'), ring = $('ring'); let v = 0;
+  const step = () => { v = Math.min(n, v + Math.max(1, n/30)); el.textContent = Math.round(v); ring.style.setProperty('--s', v); if (v < n) requestAnimationFrame(step); };
+  reduce ? (el.textContent = n, ring.style.setProperty('--s', n)) : step();
+}
+
+function render(d){
+  const s = d.stats;
+  document.body.className = d.mood === 'happy' ? 'ok' : d.mood;
+  $('face').innerHTML = faces[d.mood];
+  setFx(s.mm > .5 || d.mood === 'scared' ? 'rain' : d.mood === 'happy' ? 'float' : 'fog');
+  countUp(d.score);
+  $('verdict').textContent = d.verdict;
+  $('where').textContent = d.city + (d.country ? ', ' + d.country : '') + ' · ' + d.day;
+  $('stats').innerHTML = [[s.temp + '°C','Temperatura'],[s.rain + '%','Lluvia'],[s.wind + ' km/h','Viento'],[s.mm + ' mm','Agua']]
+    .map(([v,l]) => `<div><b>${v}</b><span>${l}</span></div>`).join('');
+
+  const sc = d.hours.map(hourScore), top = Math.max(...sc), bi = sc.indexOf(top);
+  const bad = d.mood === 'scared' || top < 50;
+  $('bars').innerHTML = d.hours.map((h, i) =>
+    `<div class="bar${i === bi && !bad ? ' best' : ''}"><em>${i === bi ? (bad ? '⚠️' : '🍬') : ''}</em><i style="height:${sc[i]}%;animation-delay:${i*.08}s"></i><span>${h.h.slice(0,2)}h</span><small>${h.t}°</small></div>`).join('');
+  $('besttxt').textContent = bad
+    ? 'Ninguna hora es buena esta noche. Si igual tienes que salir, la menos mala es las ' + d.hours[bi].h + ' (' + top + '/100): lleva paraguas.'
+    : 'Sal a las ' + d.hours[bi].h + ': es la hora con mejor clima (' + top + '/100).';
+
+  const [e, name, why] = costume(s);
+  $('cos').innerHTML = `<span class="e">${e}</span><div><b>${name}</b>${why}</div>`;
+
+  const items = kit(s);
+  $('kit').innerHTML = items.map(([em, l], i) => `<button type="button" class="chip" aria-pressed="false" data-i="${i}">${em} ${l}</button>`).join('');
+  $('kitmsg').textContent = 'Marca lo que ya tienes listo.';
+  $('kit').onclick = ev => {
+    const b = ev.target.closest('.chip'); if (!b) return;
+    b.setAttribute('aria-pressed', b.getAttribute('aria-pressed') !== 'true');
+    const all = [...document.querySelectorAll('.chip')].every(c => c.getAttribute('aria-pressed') === 'true');
+    $('kitmsg').textContent = all ? '¡Todo listo para el botín! 🎃' : 'Marca lo que ya tienes listo.';
+  };
+
+  $('tips').innerHTML = d.tips.map(t => `<li>${t}</li>`).join('');
+  $('share').onclick = async () => {
+    const txt = `🎃 ${d.city}: ${d.score}/100. ${d.verdict} Mejor hora: ${d.hours[bi].h}. Disfraz: ${name}.`;
+    try { navigator.share ? await navigator.share({ text: txt }) : (await navigator.clipboard.writeText(txt), $('msg').textContent = 'Veredicto copiado.'); } catch (e) {}
+  };
+  $('result').hidden = false;
+}
+</script>
+</body>
+</html>
